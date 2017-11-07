@@ -5,6 +5,7 @@ Script to download each chapter of the webnovel, merge them together and convert
 - jq
 - nodejs-unfluff
 - ebook-convert (Calibre)
+- wget
 
 # Usage
 Set variables name, mainUrl, chapters and fromZero at the beginning of the python file and run the script
