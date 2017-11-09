@@ -8,6 +8,8 @@ import errno
 import os
 import shutil
 import subprocess
+import sys
+from newspaper import Article
 
 
 # Book name
@@ -32,26 +34,24 @@ def runInShell(command):
 
 
 def download(mainUrl, name, number):
-  """Download webpage, extract test, add some empty lines"""
+  """Download webpage, extract main article, save result"""
   fileName = os.path.join('chapters', '%s-%d.txt' % (name, number))
+  url = "%s%d" % (mainUrl, number)
 
-  # download webpage
-  command = 'wget -q -O- "%s%d" | unfluff | jq -r ".title, .text" > "%s"' %\
-      (mainUrl, number, fileName)
-  runInShell(command)
+  article = Article(url)
+  article.download()
+  article.parse()
 
-  # New line after title
-  command = "sed -i '1 a\\\\' '%s'" % (fileName)
-  runInShell(command)
-
-  # New line at the end of the file
-  command = "sed -i -e '$a\\' '%s'" % (fileName)
-  runInShell(command)
-
-  if number != start:
-    # New lne at beginning of the file
-    command = "sed -i '1i\\\\' '%s'" % (fileName)
-    runInShell(command)
+  # save file
+  try:
+    file = open(fileName, "w")
+    file.write(article.text)
+    file.close()
+  except OSError as err:
+    print("OS error: {0}".format(err))
+  except:
+    print("Unexpected error:", sys.exc_info()[0])
+    raise
 
 
 def main():

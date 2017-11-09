@@ -1,14 +1,12 @@
-# NovelDownloader
+* NovelDownloader
 Script to download each chapter of the webnovel, merge them together and convert to epub
 
-# Dependencies
-- jq
-- nodejs-unfluff
+* Dependencies
 - ebook-convert (Calibre)
-- wget
+- python-newspaper3k
 
-# Usage
+* Usage
 Set variables name, mainUrl, chapters and fromZero at the beginning of the python file and run the script
 
-# Author`s comment
-Bash would be better choice for this script but  Python is cuter.
+* Author`s comment
+Slowly getting rid of external commands.
