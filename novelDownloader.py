@@ -12,18 +12,23 @@ from bs4 import BeautifulSoup
 from ebooklib import epub
 from newspaper import Article
 
+
+###### Configuration #######
+
 # Book name
-name = "Name"
-# Base url, this is used as url = mainUrl + <number of chapter>
-mainUrl = "http://example.com/chapter-"
-# Number of all chapter
-numberOfChapters = 1
-# Start from 0 or 1 ?
-fromZero = False
+name = "Chaotic sword god"
+# Base url, this is used as url = mainUrl [without number of chapter]
+mainUrl = "http://gravitytales.com/novel/chaotic-sword-god/csg-chapter-"
+
+# Number of Chapter you wish to start
+startInChapter = 5
+
+# How many chapters you wish download
+numberOfChapters = 7
+
+####### End Configuration ######
 
 
-# numerical representation of start for script
-start = 0 if fromZero else 1
 
 re_paragraph = re.compile(r"(.+?\n\n|.+?$)", re.MULTILINE)
 
@@ -98,7 +103,7 @@ def packageEbook():
 
 	ebookChapters = []
 
-	i = start
+	i = startInChapter
 	for chapter_data in chapters:
 		chapter = epub.EpubHtml(
 			title="%s - %d" % (name, i),
@@ -126,19 +131,33 @@ def packageEbook():
 	ebook.add_item(nav_page)
 	ebook.spine = [intro_ch, nav_page] + ebookChapters
 
-	filename = '%s.epub' % (name)
+	epubName = existFolder(name, 0)
+
+	filename = '%s.epub' % (epubName)
 	print("Saving to '%s'" % filename)
 	if os.path.exists(filename):
 			os.remove(filename)
 	epub.write_epub(filename, ebook, {})
 
+def existFolder (name, cont):
+	if (cont == 0):
+		name = name
+	else:
+		name = name + str(cont)
+
+	for existentFolder in os.listdir():
+		print(existentFolder)
+		if (existentFolder == name+".epub"):
+			name = existFolder(name, cont+1)
+			break
+	return name
 
 def main():
 	"""Start main downloader and converter"""
 
 	# Download all chapters one by one
 	print("Downloading...")
-	for i in range(start, numberOfChapters + 1, 1):
+	for i in range(startInChapter, numberOfChapters + 1, 1):
 		print("Downloading: ", name, i)
 		chapters.append(download(i))
 
