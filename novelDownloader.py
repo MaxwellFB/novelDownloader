@@ -16,14 +16,17 @@ from newspaper import Article
 ###### Configuration #######
 
 # Book name
-name = "Chaotic sword god"
-# Base url, this is used as url = mainUrl [without number of chapter]
-mainUrl = "http://gravitytales.com/novel/chaotic-sword-god/csg-chapter-"
+name = "Name"
+#Exemple == name = "Chaotic sword god"
 
-# Number of Chapter you wish to start
-startInChapter = 5
+# Base url, this is used as url = mainUrl [without number of chapter], the number of chapter must be at the end of the URL
+mainUrl = "URL"
+#Exemple == mainUrl = "http://gravitytales.com/novel/chaotic-sword-god/csg-chapter-" #[.../csg-chapter-<number of chapter>]
 
-# How many chapters you wish download
+# Number of the Chapter you want to start
+startInChapter = 1
+
+# Number of the last chapter that you want to download
 numberOfChapters = 7
 
 ####### End Configuration ######
@@ -139,18 +142,18 @@ def packageEbook():
 			os.remove(filename)
 	epub.write_epub(filename, ebook, {})
 
+#If the name exist, then change the name, with a number in the end (name1 - name2, name3...)
 def existFolder (name, cont):
 	if (cont == 0):
-		name = name
+		nameTemp = name
 	else:
-		name = name + str(cont)
+		nameTemp = name + str(cont)
 
 	for existentFolder in os.listdir():
-		print(existentFolder)
-		if (existentFolder == name+".epub"):
-			name = existFolder(name, cont+1)
+		if (existentFolder == nameTemp+".epub"):
+			nameTemp = existFolder(name, cont+1)
 			break
-	return name
+	return nameTemp
 
 def main():
 	"""Start main downloader and converter"""
